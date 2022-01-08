@@ -1,12 +1,5 @@
-[org 0x7c00]
-mov ah, 0x0e
-
-mov dx, 0x1fb6
-call print_hex
-
-jmp $
 print_hex:
-
+pusha
     mov cx, 4       ; loop 4
     hex_loop:
         mov ax, dx      ; handle in ax
@@ -25,10 +18,6 @@ print_hex:
         loop hex_loop
     mov bx, HEX_OUT
     call print_string
-    ret
-
-%include "../chapter3/print_string.asm"
+popa
+ret
 HEX_OUT: db '0x0000', 0
-; zero padding and magic bios number
-times 510-($-$$) db 0
-dw 0xaa55
