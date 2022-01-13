@@ -1,5 +1,4 @@
 disk_load:
-pusha
 push dx
 ; read sector
 mov ah, 0x02 ; BIOS read sector function
@@ -9,7 +8,6 @@ mov ah, 0x02 ; BIOS read sector function
 ; mov dh, 1   ; select 2nd side of floppy
 ; mov cl, 4   ; select the 4th sector 
 ; mov al, 5   ; read 5 sectors
-mov ah, 0x02
 mov al, dh
 mov ch, 0x00
 mov dh, 0x00
@@ -25,18 +23,23 @@ int 0x13
 
 jc disk_error   ; jump if the carry flag(CF) was set, which signal a general fault
 
+
 pop dx
 cmp dh, al       
 jne disk_error  ; jump if the number of sectors which has been readed is not equal to 5
-
-popa
 ret
 
 disk_error:
     mov bx, DISK_ERROR_MSG
     call print_string
     jmp $
+disk_error1:
+    mov bx, DISK_ERROR_MSG1
+    call print_string
+    jmp $
 
 ; global variables
 DISK_ERROR_MSG: 
     db "Disk read error!", 0x0e, 0x0a, 0
+DISK_ERROR_MSG1: 
+    db "we have arrived here", 0x0e, 0x0a, 0
